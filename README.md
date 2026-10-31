@@ -105,7 +105,7 @@ API documentation:
 Permissions live in one table: `app/permissions.py`.
 
 
-## Member 1 handoff extensions
+## Customer and Billing Extensions
 
 ### Customer profiles
 Signup continues to create the portal `User` only, because the existing signup contract collects only email and password. A customer then creates/completes their own one-to-one profile:
