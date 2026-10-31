@@ -1,0 +1,56 @@
+{
+  "project_name": "Subscription Management System",
+  "client": "Brightloop Software (fictional)",
+  "objective": "Single platform for product/plan setup, quotations, subscriptions, automated invoicing, payment recording and revenue reporting.",
+  "roles": {
+    "admin": ["full system access", "create staff", "create discount rules", "configure products, plans, taxes"],
+    "internal_staff": ["limited access", "day-to-day customer, subscription and invoice work"],
+    "customer": ["portal", "view/manage only own subscriptions and invoices"]
+  },
+  "authentication": {
+    "signup": ["email", "password"],
+    "unique_email": true,
+    "password_rules": {"min_length_exclusive": 8, "require_uppercase": true, "require_lowercase": true, "require_special_char": true},
+    "password_reset": "reset link sent to registered email"
+  },
+  "entities": {
+    "product": {"fields": ["name", "type", "sales_price", "cost_price", "notes"], "variants": {"example": "brand", "example_price_extra": {"Odoo": 560}}},
+    "plan": {"fields": ["price", "billing_period", "min_quantity", "available_from", "available_to"], "billing_period_values": ["daily", "weekly", "monthly", "yearly"], "admin_toggles_per_plan": ["auto_close_at_end", "closable_early", "pausable", "renewable"]},
+    "quotation_template": {"contains": ["plan", "product_lines"], "validity": "set number of days"},
+    "subscription": {"fields": ["number", "customer", "plan", "start_date", "expiry_date", "payment_terms"], "lines": ["product", "quantity", "unit_price", "taxes", "amount"], "status_flow": ["Draft", "Quotation", "Confirmed", "Active", "Closed"]},
+    "invoice": {"source": "generated from subscription", "prefilled": ["customer", "lines", "taxes", "totals"], "actions": ["confirm", "cancel", "send", "print"], "status_flow": ["Draft", "Confirmed", "Paid"]},
+    "tax_rule": {"managed_by": "admin", "applied": "automatically"},
+    "discount_rule": {"managed_by": "admin", "type": ["fixed_amount", "percentage"], "conditions": ["min_purchase", "min_quantity", "start_date", "end_date", "usage_limit"], "scope": ["specific_products", "whole_subscription"], "behaviour": "auto-applied on next invoice; stops on expiry or limit reached"},
+    "payment": {"fields": ["method", "amount", "date", "note", "invoice"]}
+  },
+  "business_rules": [
+    "One account per email",
+    "Only admin adds staff",
+    "Only admin creates discount rules",
+    "Invoices created in bulk on billing day without manual entry",
+    "No invoice duplicated and none skipped for a due subscription",
+    "Discounts appear on next invoice automatically",
+    "Paid vs outstanding visible per invoice; overdue identifiable"
+  ],
+  "reporting": {"views": ["active subscriptions", "revenue received", "amount owed", "payments", "overdue invoices"], "features": ["filters", "summary view"]},
+  "constraints": {
+    "performance": "every page responds in under 2 seconds with thousands of subscriptions",
+    "scale": "hundreds of subscriptions due at once; thousands on the books",
+    "tech_stack": "[TECH_STACK]",
+    "payment_gateway": "[PAYMENT_GATEWAY]",
+    "email_provider": "[EMAIL_PROVIDER]",
+    "currency": "[CURRENCY]",
+    "tax_jurisdiction": "[TAX_RULES]"
+  },
+  "evaluation": {"criteria": "[EVALUATION_CRITERIA]", "scoring_rubric": "[SCORING_RUBRIC]"},
+  "deliverables": {"required": "Working platform covering all scenarios", "format": "[SUBMISSION_FORMAT]", "timeline": "[TIMELINE]", "prizes_sponsors": "[PRIZES]"},
+  "provided_assets": {"datasets": ["[DATASET_1]"], "sample_io": ["[SAMPLE_IO_1]"], "diagrams": ["[DIAGRAM_1]"]},
+  "open_questions": [
+    "Tech stack and hosting",
+    "Payment gateway integration vs manual recording",
+    "Tax model details",
+    "Proration, paused-plan billing, renewal rules",
+    "Definition of overdue",
+    "Scoring rubric and deadline"
+  ]
+}
