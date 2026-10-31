@@ -1,0 +1,35 @@
+
+@import "tailwindcss";
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .invoice-print-area,
+  .invoice-print-area * {
+    visibility: visible;
+  }
+
+  .invoice-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 30px;
+    background: white;
+    color: black;
+  }
+
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+}
