@@ -1,20 +1,96 @@
-# Subscription Management: Platform and Auth
+# Odoo Subscription Management System
 
-Users, roles, products, variants, plans and taxes, with sign-up/login, password rules, a reset-link
-flow, server-side role permissions and admin-only staff creation.
+An integrated subscription management platform for managing customers, products, variants, subscription plans, taxes, payment terms, subscriptions and billing operations.
 
-Stack: FastAPI, SQLAlchemy 2.0, Alembic, pytest (see "Assumptions" in the hand-off notes).
+## Technology Stack
 
-## Run it
-```bash
-python -m venv .venv && . .venv/bin/activate
-pip install -r requirements-dev.txt
-cp .env.example .env            # then set SECRET_KEY
-alembic upgrade head            # creates the tables
-ADMIN_PASSWORD='Str0ng!pass' python -m scripts.create_admin you@example.com   # first admin
-uvicorn app.main:app --reload   # docs at http://127.0.0.1:8000/docs
-pytest
+| Component | Technology |
+|---|---|
+| Backend | FastAPI |
+| Language | Python |
+| ORM | SQLAlchemy 2.0 |
+| Migrations | Alembic |
+| Validation | Pydantic |
+| Authentication | JWT |
+| Password hashing | Argon2 |
+| Testing | pytest |
+
+## Features
+
+- User registration, login and password reset.
+- JWT authentication and role-based permissions.
+- Customer profile management.
+- Product and variant management.
+- Subscription plan, tax and payment-term management.
+- Subscription and subscription-line models.
+- Quotation templates and quotation lines.
+- Invoice and invoice-line models.
+- Discount rules and invoice discount applications.
+- Shared billing adapters and status-history services.
+
+**Note:** Billing models and integration services are implemented. Dedicated public billing API endpoints are not currently registered.
+
+## Project Structure
+
+```text
+app/
+├── routers/
+├── services/
+├── models.py
+├── billing_models.py
+├── schemas.py
+├── database.py
+├── security.py
+├── permissions.py
+└── main.py
+migrations/
+tests/
+scripts/
+requirements.txt
+requirements-dev.txt
+README.md
 ```
+
+## Installation and Setup
+
+### Linux / macOS
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+cp .env.example .env
+```
+
+Configure the required environment variables in `.env`. Never commit secrets or credentials.
+
+### Windows PowerShell
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+Copy-Item .env.example .env
+```
+
+### Database Migrations
+
+```bash
+alembic upgrade head
+alembic current
+```
+
+### Start the Application
+
+```bash
+uvicorn app.main:app --reload
+```
+
+API documentation:
+- Swagger UI: http://127.0.0.1:8000/docs
+- ReDoc: http://127.0.0.1:8000/redoc
 
 ## Endpoints (all under /api)
 | Area | Endpoints | Who |
@@ -56,29 +132,51 @@ Use `app.services.member1_service` for SQLAlchemy-backed lookups (`get_customer`
 ### Shared status history
 `app.services.status_history.record_status_change(...)` provides a shared audit helper for other modules. It records entity type/ID, previous and new status, timestamp, actor user ID, and reason. Pass `commit=False` to participate in a larger transaction.
 
-### Windows PowerShell setup
-Run from the `subscription_platform` project directory:
+## Migration Reference
 
-```powershell
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-py -m pip install --upgrade pip
-py -m pip install -r requirements-dev.txt
-Copy-Item .env.example .env
+Alembic manages database schema changes. Available migrations are located in `migrations/versions/`.
+
+Apply migrations:
+
+```bash
+alembic upgrade head
 ```
 
-Edit `.env` and set a long random `SECRET_KEY`. Then run:
+Check the current revision:
 
-```powershell
-py -m alembic upgrade head
-$env:ADMIN_PASSWORD = "Str0ng!pass"
-py -m scripts.create_admin admin@example.com
-py -m uvicorn app.main:app --reload
+```bash
+alembic current
 ```
 
-Open `http://127.0.0.1:8000/docs`. In a second terminal (with the virtual environment active), run `py -m pytest -v`.
+Review migration history:
 
-The new additive migration is `0002_member1_extensions.py`; the original `0001_auth_and_catalog.py` migration is unchanged. The handoff additions have tests for profile ownership and duplicate prevention, payment-term validation and deletion restrictions, lookups, and billing adapters. In this environment, the complete suite passes with 69 tests; rerun `py -m pytest -v` on the target Windows machine before submission.
+```bash
+alembic history
+```
+
+## Running Tests
+
+Run the automated test suite from the project root:
+
+```bash
+pytest -v
+```
+
+## Development Guidelines
+
+- Keep API routes inside `app/routers/`.
+- Keep business logic inside `app/services/`.
+- Define request and response validation using Pydantic schemas.
+- Use SQLAlchemy models for database entities.
+- Use Alembic migrations for schema changes.
+- Add or update tests when changing application behavior.
+- Keep secrets and local database files out of Git.
+- Coordinate shared changes with the other team members.
+
+
+## Repository
+
+The project uses Git for version control. Create focused commits with descriptive messages and push changes to the shared `main` branch only after reviewing them.
 
 ## Team Members
 
