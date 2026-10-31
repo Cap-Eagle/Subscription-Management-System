@@ -1,4 +1,4 @@
-# [PROJECT_NAME]: Subscription Management System
+# Brightloop: Subscription Management System
 
 > Hackathon project for the **Subscription Management System** problem statement (Brightloop Software scenario).
 > Team: **[TEAM_NAME]**
@@ -27,10 +27,10 @@ reports are built manually each quarter. Renewals get missed, invoices go out wr
 
 ## Tech stack
 
-- Frontend: **[FRONTEND_STACK]**
-- Backend: **[BACKEND_STACK]**
-- Database: **[DATABASE]**
-- Other tools: **[OTHER_TOOLS]**
+- Frontend: **[]**
+- Backend: **[]**
+- Database: **[]**
+- Other tools: **[}**
 
 ## Team and ownership
 
