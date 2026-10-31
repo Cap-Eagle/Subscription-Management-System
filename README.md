@@ -79,3 +79,15 @@ py -m uvicorn app.main:app --reload
 Open `http://127.0.0.1:8000/docs`. In a second terminal (with the virtual environment active), run `py -m pytest -v`.
 
 The new additive migration is `0002_member1_extensions.py`; the original `0001_auth_and_catalog.py` migration is unchanged. The handoff additions have tests for profile ownership and duplicate prevention, payment-term validation and deletion restrictions, lookups, and billing adapters. In this environment, the complete suite passes with 69 tests; rerun `py -m pytest -v` on the target Windows machine before submission.
+
+## Team Members
+
+This project is collaboratively developed by:
+
+| No. | Team Member |
+|---:|---|
+| 1 | Adithya Prajeesh |
+| 2 | Adith K |
+| 3 | Adinarayanan |
+| 4 | Devapriyan G S |
+
